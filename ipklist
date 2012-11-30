@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# ipklist [-c] <package-name>
+# -c prints the control metadata
+DISPLAY_CONTROL=0
+
+for i in "$@"; do
+    if [ "$i" == "-c" ]; then
+        DISPLAY_CONTROL=1
+        shift
+    fi
+done
+
 if [ -z $1 ]; then
         echo "No package specified"
         exit 1
@@ -15,14 +26,26 @@ cd /tmp
 
 echo "Checking $OLDCWD/$1"
 
-ar -x $OLDCWD/$1 data.tar.gz
-if [ $? -ne 0 ]; then
-	echo "Error extracting archive members"
-	rm $1
-	exit 1
+if [ $DISPLAY_CONTROL -eq 1 ]; then
+    ar -x $OLDCWD/$1 control.tar.gz
+    if [ $? -ne 0 ]; then
+        echo "Error extracting control.tar.gz"
+        rm $1
+        exit 1
+    fi
+    tar xf control.tar.gz
+    cat control
+    rm -f control
+else
+    ar -x $OLDCWD/$1 data.tar.gz
+    if [ $? -ne 0 ]; then
+	    echo "Error extracting data.tar.gz"
+    	rm $1
+	    exit 1
+    fi
+    tar tzvf data.tar.gz
 fi
 
-tar tzvf data.tar.gz
-rm data.tar.gz
+rm -f data.tar.gz control.tar.gz
 
 cd $OLDCWD
