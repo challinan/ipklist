@@ -1,0 +1,28 @@
+#!/bin/sh
+
+if [ -z $1 ]; then
+        echo "No package specified"
+        exit 1
+fi
+
+if [ ! -f $1 ]; then
+        echo "File not found"
+        exit 1
+fi
+
+OLDCWD=$PWD
+cd /tmp
+
+echo "Checking $OLDCWD/$1"
+
+ar -x $OLDCWD/$1 data.tar.gz
+if [ $? -ne 0 ]; then
+	echo "Error extracting archive members"
+	rm $1
+	exit 1
+fi
+
+tar tzvf data.tar.gz
+rm data.tar.gz
+
+cd $OLDCWD
