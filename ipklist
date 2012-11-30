@@ -33,7 +33,7 @@ if [ $DISPLAY_CONTROL -eq 1 ]; then
         rm $1
         exit 1
     fi
-    tar xf control.tar.gz
+    tar xmf control.tar.gz
     cat control
     rm -f control
 else
