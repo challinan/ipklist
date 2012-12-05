@@ -2,6 +2,14 @@
 
 # ipklist [-c] <package-name>
 # -c prints the control metadata
+
+if [ $# -lt 1 ]; then
+    echo "ipklist [-c] <package-name>"
+    echo "-c prints the control metadata"
+    exit 1
+fi
+exit
+
 DISPLAY_CONTROL=0
 
 for i in "$@"; do
