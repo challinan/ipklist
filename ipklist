@@ -8,7 +8,6 @@ if [ $# -lt 1 ]; then
     echo "-c prints the control metadata"
     exit 1
 fi
-exit
 
 DISPLAY_CONTROL=0
 
